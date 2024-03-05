@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Confetti Effect</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
+
+        body {
+            overflow: hidden;
+            font-family: "Montserrat", sans-serif;
+            background: #281c1c;
+        }
+
+        .message {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .message__button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: all .3s ease-in-out;
+        }
+
+        .message__button:after {
+            position: absolute;
+            content: 'Что будет если нажать на большую красную кнопку? 😈';
+            text-align: center;
+            color: #fff;
+            width: 410px;
+            top: -150px;
+            left: 18%;
+            transform: translateX(-50%);
+            transform: rotate(-10deg);
+            font-size: 34px;
+            font-weight: 600;
+        }
+
+        .message__button-no-after:after {
+            content: unset;
+        }
+
+        .message__button-no-after:before {
+            position: absolute;
+            text-align: center;
+            color: #fff;
+            content: 'С днем рождения!';
+            font-family: "Playfair Display SC", serif;
+            font-size: 80px;
+            font-weight: 400;
+            width: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -300px;
+        }
+
+        .message__confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99999;
+            transition: all .3s ease-in-out;
+        }
+
+        .message__confetti canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .message__confetti-diana:before {
+            position: absolute;
+            content: '';
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-image: url(diana.png);
+            bottom: 50px;
+            left: 50px;
+            background-size: cover;
+        }
+
+        .message__confetti:after {
+            content: 'Поздравляю с днем рождения! 💐💐💐 А желаю я тебе.....';
+            color: #000;
+            background: #fff;
+            position: absolute;
+            bottom: 150px;
+            left: 210px;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            max-width: 250px;
+            transform: rotate(-10deg);
+            opacity: 0;
+            transition: opacity .3s ease-in-out;
+        }
+
+        .message__confetti-diana:after {
+            opacity: 1;
+        }
+
+        .message__confetti-diana-2::after {
+            content: 'Пузыри бесконечные, можно лопать) И обязательно включи звук';
+        }
+
+        /* @ */
+        .message__bubbles {
+            position: absolute;
+            margin-top: -100vh;
+            width: 100vw;
+            height: 100vh;
+            transition: all .3s ease-in-out;
+        }
+
+        .message__bubbles .bubble {
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            text-align: center;
+            border: 1px solid #f2f2f2
+        }
+
+        .message__bubbles .bubble p {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0;
+            color: #fff;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+</head>
+
+<body>
+    <div class="message">
+        <div class="message__button">
+            <img src="red-button.png" alt="">
+        </div>
+        <div class="message__confetti">
+            <canvas width="100%" height="100%"></canvas>
+        </div>
+        <div class="message__bubbles"></div>
+    </div>
+    <script>
+        const jsConfetti = new JSConfetti({ canvas: document.querySelector(".message__confetti canvas") })
+        var bubblePopSound = new Howl({ src: ['bubble_pop.mp3'] });
+        var bgMusic = new Howl({ src: ['music.mp3'] });
+
+        function startConfetti() {
+            jsConfetti.addConfetti({
+                emojis: ['💐', '🌺', '✨', '🌸'],
+                emojiSize: 300,
+                confettiNumber: 50,
+                confettiRadius: 70,
+            })
+            jsConfetti.addConfetti({
+                confettiColors: [
+                    '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
+                ],
+                confettiNumber: 600,
+            })
+        }
+
+
+        const button = document.querySelector(".message__button");
+
+        button.addEventListener("click", () => {
+            button.classList.add("message__button-no-after");
+            document.querySelector(".message__confetti").classList.add("message__confetti-diana");
+            startConfetti();
+
+            setTimeout(function () {
+                button.style.top = "-900px";
+                document.querySelector(".message__bubbles").style.marginTop = "0";
+                document.querySelector(".message__confetti").classList.add("message__confetti-diana-2");
+
+
+                button.style.pointerEvents = "none";
+            }, 2500);
+        });
+
+        function createBubbles() {
+            for (var i = 0; i < wishes.length; i++) {
+                let bubble = new Bubble('.message__bubbles', 'Hello, World!');
+            }
+        }
+
+        var wishes = [
+            "Счастья, здоровья и любви!",
+            "Пусть все мечты сбываются!",
+            "Будь всегда счастлива!",
+            "Пусть каждый день будет ярким!",
+            "Желаю успехов во всех начинаниях!",
+            "Пусть удача всегда будет с тобой!",
+            "Желаю незабываемых моментов!",
+            "Пусть каждый день будет полон радости!",
+            "Желаю никогда не унывать!",
+            "Пусть в твоей жизни будет много смеха!",
+            "Желаю тебе оставаться таким же замечательным человеком!",
+            "Пусть твоя жизнь будет полна приключений!",
+            "Желаю тебе всегда быть в гармонии с собой!",
+            "Пусть каждый день приносит тебе новые возможности!"
+        ];
+
+        var bubbles = [];
+
+        class Bubble {
+            constructor(container) {
+                this.container = document.querySelector(container);
+                this.element = document.createElement('div');
+                let inner = document.createElement('p');
+                inner.innerHTML = wishes[Math.floor(Math.random() * wishes.length)];
+                this.element.appendChild(inner);
+                this.element.className = "bubble";
+                this.container.appendChild(this.element);
+                this.direction = Math.random() * 2 * Math.PI;
+                this.speed = 1.5;
+                let containerRect = this.container.getBoundingClientRect();
+                let x = Math.random() * (containerRect.width - this.element.offsetWidth);
+                let y = Math.random() * (containerRect.height - this.element.offsetHeight);
+                this.element.style.left = x + 'px';
+                this.element.style.top = y + 'px';
+
+                this.updatePosition();
+                this.element.addEventListener('click', () => {
+                    this.container.removeChild(this.element);
+                    bubblePopSound.play();
+                    new Bubble(container);
+                    jsConfetti.addConfetti({
+                        confettiColors: [
+                            '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
+                        ],
+                        confettiNumber: 600,
+                    })
+                });
+                bubbles.push(this);
+            }
+
+            updatePosition() {
+                let rect = this.element.getBoundingClientRect();
+                let containerRect = this.container.getBoundingClientRect();
+
+                let x = rect.left + this.speed * Math.cos(this.direction);
+                let y = rect.top + this.speed * Math.sin(this.direction);
+
+                if (x < containerRect.left || x + rect.width > containerRect.right) {
+                    this.direction = Math.PI - this.direction;
+                    x = Math.max(containerRect.left, Math.min(x, containerRect.right - rect.width));
+                }
+                if (y < containerRect.top || y + rect.height > containerRect.bottom) {
+                    this.direction = -this.direction;
+                    y = Math.max(containerRect.top, Math.min(y, containerRect.bottom - rect.height));
+                }
+
+                this.element.style.left = (x - containerRect.left) + 'px';
+                this.element.style.top = (y - containerRect.top) + 'px';
+                this.checkCollision();
+                requestAnimationFrame(() => this.updatePosition());
+            }
+
+
+            checkCollision() {
+                let collisions = [];
+                for (let other of bubbles) {
+                    if (other === this) continue;
+                    let dx = this.element.offsetLeft - other.element.offsetLeft;
+                    let dy = this.element.offsetTop - other.element.offsetTop;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < this.element.offsetWidth / 2 + other.element.offsetWidth / 2) {
+                        collisions.push({ other, dx, dy, distance });
+                    }
+                }
+
+                if (collisions.length > 0) {
+                    this.direction = Math.random() * 2 * Math.PI;
+                    for (let { other, dx, dy, distance } of collisions) {
+                        other.direction = Math.random() * 2 * Math.PI;
+
+                        let overlap = this.element.offsetWidth / 2 + other.element.offsetWidth / 2 - distance;
+                        let adjustX = overlap * dx / distance;
+                        let adjustY = overlap * dy / distance;
+                        this.element.style.left = (this.element.offsetLeft + adjustX) + 'px';
+                        this.element.style.top = (this.element.offsetTop + adjustY) + 'px';
+                        other.element.style.left = (other.element.offsetLeft - adjustX) + 'px';
+                        other.element.style.top = (other.element.offsetTop - adjustY) + 'px';
+                    }
+                }
+            }
+        }
+
+        bgMusic.play();
+        createBubbles();
+    </script>
+</body>
+
+</html>
